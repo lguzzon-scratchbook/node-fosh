@@ -1,0 +1,31 @@
+{
+  "name": "shdo",
+  "version": "0.0.0",
+  "description": "Execute shell commands in multiple directories grouped by tags",
+  "main": "src/index.js",
+  "bin": "bin/shdo.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/bimlas/shdo.git"
+  },
+  "keywords": [
+    "shell",
+    "execute",
+    "run",
+    "command",
+    "multiple",
+    "directory"
+  ],
+  "author": "bimlas",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://gitlab.com/bimlas/shdo/issues"
+  },
+  "homepage": "https://gitlab.com/bimlas/shdo#readme",
+  "dependencies": {
+    "yargs": "^13.2.2"
+  }
+}
