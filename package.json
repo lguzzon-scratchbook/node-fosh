@@ -26,6 +26,7 @@
   },
   "homepage": "https://gitlab.com/bimlas/shdo#readme",
   "dependencies": {
+    "conf": "^3.0.0",
     "yargs": "^13.2.2"
   }
 }
