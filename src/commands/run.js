@@ -1,7 +1,7 @@
 'use strict';
 
 const
-    repl = require('repl'),
+    repl = require('../repl'),
     execSync = require('child_process').execSync;
 
 exports.command = 'run [pathspec...]';
@@ -12,17 +12,16 @@ exports.builder = {
     }
 };
 exports.handler = function (argv) {
-    function myEval(cmd, context, filename, callback) {
+    repl('run', function (line) {
         argv.pathspec.forEach(function(pathspec) {
             console.log(header(pathspec));
+            // TODO: Handle throw (unknown command in shell)
             execSync(
-                cmd, {stdio: 'inherit', cwd: pathspec}
+                line, {stdio: 'inherit', cwd: pathspec}
             );
         });
         console.log('='.repeat(process.stdout.columns - 1));
-        callback();
-    }
-    repl.start({ prompt: 'shdo> ', eval: myEval });
+    });
 };
 
 function header(title) {
