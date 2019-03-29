@@ -1,7 +1,7 @@
 'use strict';
 
 const
-    repl = require('../repl'),
+    cli = require('../cli'),
     execSync = require('child_process').execSync;
 
 exports.command = 'run [pathspec...]';
@@ -12,18 +12,15 @@ exports.builder = {
     }
 };
 exports.handler = function (argv) {
-    repl('run', function (line) {
+    cli.repl('run', function (line) {
         argv.pathspec.forEach(function(pathspec) {
-            console.log(header(pathspec));
-            // TODO: Handle throw (unknown command in shell)
-            execSync(
-                line, {stdio: 'inherit', cwd: pathspec}
-            );
+            cli.iterationSeparator(pathspec);
+            try {
+                execSync(line, {stdio: 'inherit', cwd: pathspec});
+            } catch (e) {
+                cli.errorMessage('There was an error while executing the command')
+            }
         });
-        console.log('='.repeat(process.stdout.columns - 1));
+        cli.loopSeparator();
     });
 };
-
-function header(title) {
-    return `\n__ ${title} ${'_'.repeat(process.stdout.columns - title.length - 5)}\n`;
-}

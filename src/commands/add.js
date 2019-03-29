@@ -1,7 +1,7 @@
 'use strict';
 
 const
-    repl = require('../repl'),
+    cli = require('../cli'),
     Conf = require('conf'),
     path = require('path');
 
@@ -10,7 +10,7 @@ exports.desc = 'Assign paths to tags';
 
 exports.handler = function (argv) {
     const conf = new Conf();
-    repl('add', function (line) {
+    cli.repl('add', function (line) {
         const dir = path.resolve(line.trim());
         argv.tags.forEach(function assignDirToTag(tag) {
             const dirList = conf.get(tag, []);
