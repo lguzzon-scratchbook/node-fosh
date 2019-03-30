@@ -30,6 +30,10 @@ function loopSeparator(title = '', level = 0) {
     console.log(`\n${'='.repeat(process.stdout.columns - 1)}`);
 }
 
+function warningMessage(message) {
+    console.warn('shdo: WARNING:', message)
+}
+
 function errorMessage(message) {
     console.error('shdo: ERROR:', message)
 }
@@ -37,4 +41,5 @@ function errorMessage(message) {
 module.exports.repl = repl;
 module.exports.iterationSeparator = iterationSeparator;
 module.exports.loopSeparator = loopSeparator;
+module.exports.warningMessage = warningMessage;
 module.exports.errorMessage = errorMessage;
