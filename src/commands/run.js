@@ -2,6 +2,7 @@
 
 const
     cli = require('../cli'),
+    pathHandler = require('../path-handler'),
     execSync = require('child_process').execSync;
 
 exports.command = 'run [pathspec...]';
@@ -13,10 +14,10 @@ exports.builder = {
 };
 exports.handler = function (argv) {
     cli.repl('run', function (line) {
-        argv.pathspec.forEach(function(pathspec) {
-            cli.iterationSeparator(pathspec);
+        pathHandler.resolve(argv.pathspec).forEach(function(dir) {
+            cli.iterationSeparator(dir);
             try {
-                execSync(line, {stdio: 'inherit', cwd: pathspec});
+                execSync(line, {stdio: 'inherit', cwd: dir});
             } catch (e) {
                 cli.errorMessage('There was an error while executing the command')
             }
