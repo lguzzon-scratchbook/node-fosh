@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/bimlas/shdo.git"
+    "url": "git+https://gitlab.com/bimlas/node-shdo.git"
   },
   "keywords": [
     "shell",
@@ -22,9 +22,9 @@
   "author": "bimlas",
   "license": "MIT",
   "bugs": {
-    "url": "https://gitlab.com/bimlas/shdo/issues"
+    "url": "https://gitlab.com/bimlas/node-shdo/issues"
   },
-  "homepage": "https://gitlab.com/bimlas/shdo#readme",
+  "homepage": "https://gitlab.com/bimlas/node-shdo#readme",
   "dependencies": {
     "conf": "^3.0.0",
     "yargs": "^13.2.2"
