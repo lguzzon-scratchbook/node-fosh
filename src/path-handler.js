@@ -19,19 +19,16 @@ function assignDirToTags(dir, tags) {
 
 function resolve(pathspec) {
     const
-        conf = new Conf(),
+        conf = new Conf();
+    let
         dirList = [];
 
     pathspec.forEach(function getPath(tagOrPath) {
         const resolvedPaths = conf.has(tagOrPath) ? conf.get(tagOrPath) : pushIfDirectoryExists([], tagOrPath);
-        resolvedPaths.forEach(function addIfNotExists(dir) {
-            if (dirList.indexOf(dir) < 0) {
-                dirList.push(dir);
-            }
-        });
+        dirList = dirList.concat(resolvedPaths);
     });
 
-    return dirList;
+    return [...new Set(dirList)];
 }
 
 function pushIfDirectoryExists(dirList, dir) {
@@ -39,7 +36,9 @@ function pushIfDirectoryExists(dirList, dir) {
 
     try {
         if (lstatSync(resolvedDir).isDirectory()) {
-            dirList.push(resolvedDir);
+            if (dirList.indexOf(resolvedDir) < 0) {
+                dirList.push(resolvedDir);
+            }
         } else {
             cli.warningMessage(`SKIPPED: "${dir}" (${resolvedDir}) is not a directory`);
         }
