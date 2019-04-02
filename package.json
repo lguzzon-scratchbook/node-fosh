@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "description": "Execute shell commands in multiple directories grouped by tags",
   "main": "src/index.js",
-  "bin": "bin/shdo.js",
+  "bin": {
+    "shdo": "./bin/shdo.js"
+  },
   "scripts": {
     "test": "mocha"
   },
