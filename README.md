@@ -18,23 +18,32 @@ shdo: add > /home/myself/photos
 shdo: add > /home/mom/my_little_family
 ```
 
+#### Find every Git repositories
+
 Tagging Git repositories under the current directory with "git-repos" tag
 
 ```
 # Linux / Windows Git Bash / ...
-$ find "./" -name ".git" -printf "%h\n" | sort -u | shdo add "git-repos"
+$ find "./" -name ".git" -printf "%h\n" | shdo add "git-repos"
 ```
 
 **NOTE**
 
 Piping to stdin may not work on Windows Git Bash, the error message is:
-          
+
 ```
 stdin is not a tty
 ```
-          
+
 In this case try it again in cmd.exe or in PowerShell.
 
+In Windows PowerShell use Everything search engine's `es` command-line
+interface to find Git repositories rapidly (ommit the path to find every
+repo):
+
+```
+$ es -regex '^\.git$' './' | Split-Path -Parent | shdo add 'git-repos'
+```
 
 ### Run
 
@@ -54,11 +63,11 @@ __ /home/me/src/git-test _____________________________________________________
  M README.adoc
  M encoding/cp1250-encoding-dos-eol.txt
  M encoding/dos-eol.txt
- 
+
 __ /home/me/helping-tom/wip-project __________________________________________
 ## master...origin/master
  M example-code.js
 
 ==============================================================================
-shdo: run > another command and so on ... 
+shdo: run > another command and so on ...
 ```
