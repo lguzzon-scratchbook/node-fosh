@@ -48,5 +48,10 @@ function pushIfDirectoryExists(dirList, dir) {
     return dirList;
 }
 
+function parse(dir) {
+    return path.parse(dir);
+}
+
 module.exports.assignDirToTags = assignDirToTags;
 module.exports.resolve = resolve;
+module.exports.parse = parse;

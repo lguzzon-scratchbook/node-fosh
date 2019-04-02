@@ -13,9 +13,11 @@ exports.builder = {
     }
 };
 exports.handler = function (argv) {
+    let dirParts;
     cli.repl('run', function (line) {
-        pathHandler.resolve(argv.pathspec).forEach(function(dir) {
-            cli.iterationSeparator(dir);
+        pathHandler.resolve(argv.pathspec).forEach(function(dir, index) {
+            dirParts = pathHandler.parse(dir);
+            cli.iterationSeparator(`@${index} ${dirParts.base} (${dirParts.dir})`);
             try {
                 execSync(line, {stdio: 'inherit', cwd: dir});
             } catch (e) {
