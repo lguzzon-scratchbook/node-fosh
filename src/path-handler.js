@@ -1,55 +1,52 @@
-'use strict';
+const Conf = require('conf');
+const path = require('path');
+const { lstatSync } = require('fs');
+const cli = require('./cli');
 
-const
-    cli = require('./cli'),
-    Conf = require('conf'),
-    path = require('path'),
-    lstatSync = require('fs').lstatSync;
+function pushIfDirectoryExists(dirList, dir) {
+  const resolvedDir = path.resolve(path.normalize(dir.trim()));
+
+  try {
+    if (lstatSync(resolvedDir).isDirectory()) {
+      if (dirList.indexOf(resolvedDir) < 0) {
+        dirList.push(resolvedDir);
+      }
+    } else {
+      cli.warningMessage(`SKIPPED: "${dir}" (${resolvedDir}) is not a directory`);
+    }
+  } catch (e) {
+    cli.warningMessage(`SKIPPED: "${dir}" (${resolvedDir}) not available`);
+  }
+  return dirList;
+}
 
 function assignDirToTags(dir, tags) {
-    const
-        conf = new Conf();
+  const conf = new Conf();
 
-    tags.forEach(function assign(tag) {
-        const dirList = conf.get(tag, []);
-        pushIfDirectoryExists(dirList, dir);
-        conf.set(tag, dirList)
-    });
+  tags.forEach((tag) => {
+    const dirList = conf.get(tag, []);
+    pushIfDirectoryExists(dirList, dir);
+    conf.set(tag, dirList);
+  });
 }
 
 function resolve(pathspec) {
-    const
-        conf = new Conf();
-    let
-        dirList = [];
+  const conf = new Conf();
+  let resolvedPaths;
+  let dirList = [];
 
-    pathspec.forEach(function getPath(tagOrPath) {
-        const resolvedPaths = conf.has(tagOrPath) ? conf.get(tagOrPath) : pushIfDirectoryExists([], tagOrPath);
-        dirList = dirList.concat(resolvedPaths);
-    });
+  pathspec.forEach((tagOrPath) => {
+    resolvedPaths = conf.has(tagOrPath)
+      ? conf.get(tagOrPath)
+      : pushIfDirectoryExists([], tagOrPath);
+    dirList = dirList.concat(resolvedPaths);
+  });
 
-    return [...new Set(dirList)];
-}
-
-function pushIfDirectoryExists(dirList, dir) {
-    const resolvedDir = path.resolve(path.normalize(dir.trim()));
-
-    try {
-        if (lstatSync(resolvedDir).isDirectory()) {
-            if (dirList.indexOf(resolvedDir) < 0) {
-                dirList.push(resolvedDir);
-            }
-        } else {
-            cli.warningMessage(`SKIPPED: "${dir}" (${resolvedDir}) is not a directory`);
-        }
-    } catch (e) {
-        cli.warningMessage(`SKIPPED: "${dir}" (${resolvedDir}) not available`);
-    }
-    return dirList;
+  return [...new Set(dirList)];
 }
 
 function parse(dir) {
-    return path.parse(dir);
+  return path.parse(dir);
 }
 
 module.exports.assignDirToTags = assignDirToTags;
