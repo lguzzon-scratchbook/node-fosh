@@ -30,6 +30,19 @@ function assignDirToTags(dir, tags) {
   });
 }
 
+function assignTagToDirs(tag, dirs) {
+  const conf = new Conf();
+
+  const dirList = conf.get(tag, []);
+  dirs.forEach(dir => pushIfDirectoryExists(dirList, dir));
+  conf.set(tag, dirList);
+}
+
+function deleteTag(tag) {
+  const conf = new Conf();
+  conf.delete(tag);
+}
+
 function resolve(pathspec) {
   const conf = new Conf();
   let resolvedPaths;
@@ -50,5 +63,7 @@ function parse(dir) {
 }
 
 module.exports.assignDirToTags = assignDirToTags;
+module.exports.assignTagToDirs = assignTagToDirs;
 module.exports.resolve = resolve;
 module.exports.parse = parse;
+module.exports.deleteTag = deleteTag;

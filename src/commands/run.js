@@ -28,14 +28,23 @@ exports.command = 'run [pathspec...]';
 exports.desc = 'Run shell commands';
 exports.builder = {
   pathspec: {
-    default: ['.'], // TODO: Defaults to previous set of pathspecs
+    default: ['MOST-RECENTLY-USED'],
   },
 };
 
 exports.handler = function runCommand(argv) {
+  const dirList = pathHandler.resolve(argv.pathspec);
+
+  if (argv.pathspec[0] === 'MOST-RECENTLY-USED') {
+    cli.warningMessage('Using most recently used directory list');
+  }
+
+  pathHandler.deleteTag('MOST-RECENTLY-USED');
+  pathHandler.assignTagToDirs('MOST-RECENTLY-USED', dirList);
+
   cli.repl('run', (line) => {
     const parsedLine = parseLine(line);
-    getTargetDirs(pathHandler.resolve(argv.pathspec), parsedLine.references)
+    getTargetDirs(dirList, parsedLine.references)
       .forEach((dir, index) => {
         const dirParts = pathHandler.parse(dir);
         cli.iterationSeparator(`@${index} ${dirParts.base} (${dirParts.dir})`);
