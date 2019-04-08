@@ -3,6 +3,8 @@ const path = require('path');
 const { lstatSync } = require('fs');
 const cli = require('./cli');
 
+const TAG_MARKER = '@';
+
 function pushIfDirectoryExists(dirList, dir) {
   const resolvedDir = path.resolve(path.normalize(dir.trim()));
 
@@ -49,9 +51,12 @@ function resolve(pathspec) {
   let dirList = [];
 
   pathspec.forEach((tagOrPath) => {
-    resolvedPaths = conf.has(tagOrPath)
-      ? conf.get(tagOrPath)
-      : pushIfDirectoryExists([], tagOrPath);
+    // TODO: Update readme
+    if (tagOrPath[0] === TAG_MARKER) {
+      resolvedPaths = conf.get(tagOrPath.substr(1), []);
+    } else {
+      resolvedPaths = pushIfDirectoryExists([], tagOrPath);
+    }
     dirList = dirList.concat(resolvedPaths);
   });
 
@@ -62,6 +67,7 @@ function parse(dir) {
   return path.parse(dir);
 }
 
+module.exports.TAG_MARKER = TAG_MARKER;
 module.exports.assignDirToTags = assignDirToTags;
 module.exports.assignTagToDirs = assignTagToDirs;
 module.exports.resolve = resolve;

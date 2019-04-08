@@ -3,7 +3,7 @@ const cli = require('../cli');
 const pathHandler = require('../path-handler');
 
 function parseLine(line) {
-  const prefix = (/^@(\d+,?)+/.exec(line) || [''])[0];
+  const prefix = ((new RegExp(`^${pathHandler.TAG_MARKER}(\\d+,?)+`)).exec(line) || [''])[0];
   const references = prefix.substr(1)
     .split(',')
     .filter(index => index !== '')
@@ -28,14 +28,14 @@ exports.command = 'run [pathspec...]';
 exports.desc = 'Run shell commands';
 exports.builder = {
   pathspec: {
-    default: ['MOST-RECENTLY-USED'],
+    default: [`${pathHandler.TAG_MARKER}MOST-RECENTLY-USED`],
   },
 };
 
 exports.handler = function runCommand(argv) {
   const dirList = pathHandler.resolve(argv.pathspec);
 
-  if (argv.pathspec[0] === 'MOST-RECENTLY-USED') {
+  if (argv.pathspec[0] === `${pathHandler.TAG_MARKER}MOST-RECENTLY-USED`) {
     cli.warningMessage('Using most recently used directory list');
   }
 
@@ -47,7 +47,7 @@ exports.handler = function runCommand(argv) {
     getTargetDirs(dirList, parsedLine.references)
       .forEach((dir, index) => {
         const dirParts = pathHandler.parse(dir);
-        cli.iterationSeparator(`@${index} ${dirParts.base} (${dirParts.dir})`);
+        cli.iterationSeparator(`${pathHandler.TAG_MARKER}${index} ${dirParts.base} (${dirParts.dir})`);
         try {
           execSync(parsedLine.shellCommand, { stdio: 'inherit', cwd: dir });
         } catch (e) {
