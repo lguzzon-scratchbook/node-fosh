@@ -11,6 +11,15 @@ function parseLine(line) {
   };
 }
 
+function getTargetDirs(dirList, references) {
+  return dirList.reduce((acc, curr, index) => {
+    if (!references || references.includes(`@${index + 1}`)) {
+      acc[index + 1] = curr;
+    }
+    return acc;
+  }, []);
+}
+
 exports.command = 'run [pathspec...]';
 exports.desc = 'Run shell commands';
 exports.builder = {
@@ -20,16 +29,12 @@ exports.builder = {
 };
 
 exports.handler = function runCommand(argv) {
-  let dirParts;
-  let parsedLine;
-
   cli.repl('run', (line) => {
-    parsedLine = parseLine(line);
-    pathHandler.resolve(argv.pathspec)
-      .filter((dir, index) => !parsedLine.references || parsedLine.references.includes(`@${index + 1}`))
+    const parsedLine = parseLine(line);
+    getTargetDirs(pathHandler.resolve(argv.pathspec), parsedLine.references)
       .forEach((dir, index) => {
-        dirParts = pathHandler.parse(dir);
-        cli.iterationSeparator(`@${index + 1} ${dirParts.base} (${dirParts.dir})`);
+        const dirParts = pathHandler.parse(dir);
+        cli.iterationSeparator(`@${index} ${dirParts.base} (${dirParts.dir})`);
         try {
           execSync(parsedLine.shellCommand, { stdio: 'inherit', cwd: dir });
         } catch (e) {
