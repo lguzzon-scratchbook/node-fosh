@@ -3,17 +3,21 @@ const cli = require('../cli');
 const pathHandler = require('../path-handler');
 
 function parseLine(line) {
-  const prefix = (/^(@\d+\s+)+/.exec(line) || [''])[0];
+  const prefix = (/^@(\d+,?)+/.exec(line) || [''])[0];
+  const references = prefix.substr(1)
+    .split(',')
+    .filter(index => index !== '')
+    .map(index => parseInt(index, 10));
 
   return {
     shellCommand: line.replace(prefix, ''),
-    references: prefix.match(/@\d+/g),
+    references: references.length ? references : null,
   };
 }
 
 function getTargetDirs(dirList, references) {
   return dirList.reduce((acc, curr, index) => {
-    if (!references || references.includes(`@${index + 1}`)) {
+    if (!references || references.includes(index + 1)) {
       acc[index + 1] = curr;
     }
     return acc;
