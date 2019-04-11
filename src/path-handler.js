@@ -51,7 +51,6 @@ function resolve(pathspec) {
   let dirList = [];
 
   pathspec.forEach((tagOrPath) => {
-    // TODO: Update readme
     if (tagOrPath[0] === TAG_MARKER) {
       resolvedPaths = conf.get(tagOrPath.substr(1), []);
     } else {

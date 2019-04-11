@@ -1,73 +1,167 @@
 # Shdo: Execute shell commands in multiple directories grouped by tags
 
+For developers who **running the same command in different directories**
+repeatedly, Shdo is a productivity tool that saves time by **executing the
+command without having to change the directory**. Unlike other similar tools,
+Shdo does not bound to a certain software (like Git for example), it can
+**execute any shell command**. **It works at least on Windows and Linux**.
+
+* **Manage multiple Git repositors together**
+  * Checkout the same branch for project and its submodules
+  * Commit with the same message: walk through the repos without
+    interruption and copy / paste the same commit message
+  * Prevent early push: you do not have to remember which repositories have
+    modified, just look at them at the end of the day to see where you need to
+    push
+* **Control multiple vagrant machines at the same time**
+
+The essence of the code in a nutshell:
+
+```
+for(dir in selectedDirectories) {
+  cd(dir);
+  shellCommand();
+}
+```
+
+Get the source code, report bugs, open pull requests, or just star because
+you didn't know that you need it:
+
 * https://gitlab.com/bimlas/node-shdo (official repository)
-* https://github.com/bimlas/node-shdo (mirror, please give a star if you like it)
+* https://github.com/bimlas/node-shdo (mirror, star if you like it)
 
 ## Commands
 
-### Add
+### Add: Assign tags to directories
 
-Assign tags to directories.
-
-The tags can be specified as command-line parameters, directories should
-be listed in the prompt, or piped to stdin.
+The tags can be specified as command-line parameters prefixed with `@`,
+directories should be listed in the prompt, or piped to stdin.
 
 ```
-$ shdo add "pictures" "personal"
+$ shdo add "@pictures" "@personal"
 shdo: add > /home/myself/photos
 shdo: add > /home/mom/my_little_family
+
+$ echo -e "/home/myself/photos \n /home/mom/my_little_family" | shdo add "@pictures" "@personal"
 ```
 
-#### Find every Git repositories
+#### Find Git repositories
 
-Tagging Git repositories under the current directory with "git-repos" tag
+**Tagging Git repositories** under the current directory (`./`) with
+"git-repos" tag:
 
 ```
 # Linux / Windows Git Bash / ...
-$ find "./" -name ".git" -printf "%h\n" | shdo add "git-repos"
+$ find "./" -name ".git" -printf "%h\n" | shdo add "@git-repos"
+
+# Windows PowerShell
+$ Get-ChildItem './' -Recurse -Directory -Hidden -Filter '.git' | ForEach-Object { Split-Path $_.FullName -Parent } | shdo add '@git-repos'
 ```
 
-**NOTE**
-
-Piping to stdin may not work on Windows Git Bash, the error message is:
-
-```
-stdin is not a tty
-```
-
-In this case try it again in cmd.exe or in PowerShell.
-
-In Windows PowerShell use Everything search engine's `es` command-line
-interface to find Git repositories rapidly (ommit the path to find every
-repo):
+**On Windows you can use Everything search engine's `es` [command-line
+interface](https://www.voidtools.com/support/everything/command_line_interface/)
+to find Git repositories rapidly**. Use the following command in PowerShell
+for this (omit the path of the root directory (`./src`) to find everywhere):
 
 ```
-$ es -regex '^\.git$' './' | Split-Path -Parent | shdo add 'git-repos'
+$ es -regex '^\.git$' './src' | Split-Path -Parent | shdo add '@git-repos'
 ```
 
-### Run
+### Run: Execute commands in multiple directories
 
-Running commands in multiple directories at once, arguments are tags or paths.
+Arguments can be tags and paths.
 
 ```
-$ shdo run "git-repos" "../wip-project"
+$ shdo run "@git-repos" "../wip-project"
 shdo: run > git status --short --branch
 
-__ /home/me/src/awesome-project ______________________________________________
+__ @1 awesome-project (/home/me/src/) ________________________________________
 ## master
 AM README.md
  M package.json
 
-__ /home/me/src/git-test _____________________________________________________
+__ @2 git-test (/home/me/src/) _______________________________________________
 ## master...origin/master
  M README.adoc
  M encoding/cp1250-encoding-dos-eol.txt
  M encoding/dos-eol.txt
 
-__ /home/me/helping-tom/wip-project __________________________________________
+__ @3 wip-project (/home/me/helping-tom/) ____________________________________
 ## master...origin/master
  M example-code.js
 
 ==============================================================================
 shdo: run > another command and so on ...
 ```
+
+#### Filtering the directory list
+
+If you want to **execute a command only in certain directories**, you can
+select them by their index.
+
+```
+shdo: run > @1,3 git status --short --branch
+
+__ @1 awesome-project (/home/me/src/) ________________________________________
+## master
+AM README.md
+ M package.json
+
+__ @3 wip-project (/home/me/helping-tom/) ____________________________________
+## master...origin/master
+ M example-code.js
+```
+
+#### Execute in the most recently used directories
+
+**This is useful if the output is long** and you want to execute additional
+commands on certain directories. In this case, open a new terminal window (so
+you can look back at results in the current terminal) and run the program
+without arguments: the directory list is always stored when tag or directory
+arguments are given, but if you run it without arguments, it executes the
+commands on the last specified directories.
+
+```
+$ shdo run "@git-repos" "../wip-project"
+shdo: run > git status --short --branch
+
+__ @1 awesome-project (/home/me/src/) ________________________________________
+## master
+AM README.md
+...
+
+# Another terminal
+
+$ shdo run
+shdo: WARNING: Using most recently used directory list
+shdo: run > @3 git diff
+
+__ @3 wip-project (/home/me/helping-tom/) ____________________________________
+ example-code.js | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/example-code.js b/example-code.js
+index 12b5e40..733220f 100644
+--- a/example-code.js
++++ b/example-code.js
+...
+```
+
+## FAQ
+
+### I use MinTTY on Windows and XY don't work or work differently
+
+Under [MinTTY](https://mintty.github.io/) (default terminal emulator of Git
+for Windows), it is not possible to identify exactly that `stdin` is a
+terminal or pipe (see https://duckduckgo.com/?q=MinTTY+is+not+a+TTY), so
+some things may work differently than in other terminals. Try using another
+terminal like system default, your IDE's builtin terminal,
+[Conemu](https://conemu.github.io/),
+[Alacritty](https://github.com/jwilm/alacritty).
+
+## Similar projects
+
+* https://github.com/joowani/dtags
+* https://github.com/coderaiser/node-longrun
+* https://github.com/MamadouSy/fed
+* https://github.com/isacikgoz/gitbatch
