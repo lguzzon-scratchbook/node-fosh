@@ -2,17 +2,19 @@
   "name": "shdo",
   "version": "0.0.0",
   "description": "Execute shell commands in multiple directories grouped by tags",
-  "main": "src/index.js",
-  "bin": {
-    "shdo": "./bin/shdo.js"
+  "license": "MIT",
+  "author": {
+    "name": "Bimba Laszlo",
+    "email": "bimbalaszlo@gmail.com",
+    "url": "https://bimlas.gitlab.io"
   },
-  "scripts": {
-    "test": "mocha",
-    "lint": "eslint --ignore-path .gitignore ."
-  },
+  "homepage": "https://gitlab.com/bimlas/node-shdo#readme",
   "repository": {
     "type": "git",
     "url": "git+https://gitlab.com/bimlas/node-shdo.git"
+  },
+  "bugs": {
+    "url": "https://gitlab.com/bimlas/node-shdo/issues"
   },
   "keywords": [
     "shell",
@@ -22,12 +24,16 @@
     "multiple",
     "directory"
   ],
-  "author": "bimlas",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://gitlab.com/bimlas/node-shdo/issues"
+  "engines": {
+    "node": ">=8"
   },
-  "homepage": "https://gitlab.com/bimlas/node-shdo#readme",
+  "bin": {
+    "shdo": "./bin/shdo.js"
+  },
+  "scripts": {
+    "test": "mocha",
+    "lint": "eslint --ignore-path .gitignore ."
+  },
   "dependencies": {
     "conf": "^3.0.0",
     "yargs": "^13.2.2"
