@@ -1,5 +1,3 @@
-/* eslint no-console: off */
-
 const readline = require('readline');
 
 function iterationSeparator(title) {
@@ -41,3 +39,5 @@ module.exports.iterationSeparator = iterationSeparator;
 module.exports.loopSeparator = loopSeparator;
 module.exports.warningMessage = warningMessage;
 module.exports.errorMessage = errorMessage;
+
+/* eslint no-console: off */

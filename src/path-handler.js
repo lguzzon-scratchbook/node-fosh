@@ -5,6 +5,8 @@ const cli = require('./cli');
 
 const TAG_MARKER = '@';
 
+const conf = new Conf();
+
 function pushIfDirectoryExists(dirList, dir) {
   const resolvedDir = path.resolve(path.normalize(dir.trim()));
 
@@ -17,46 +19,37 @@ function pushIfDirectoryExists(dirList, dir) {
       cli.warningMessage(`SKIPPED: "${dir}" (${resolvedDir}) is not a directory`);
     }
   } catch (e) {
-    cli.warningMessage(`SKIPPED: "${dir}" (${resolvedDir}) not available`);
+    cli.warningMessage(`SKIPPED: cannot access "${dir}" (${resolvedDir})`);
   }
   return dirList;
 }
 
 function assignDirToTags(dir, tags) {
-  const conf = new Conf();
-
   tags.forEach((tag) => {
-    const dirList = conf.get(tag, []);
-    pushIfDirectoryExists(dirList, dir);
-    conf.set(tag, dirList);
+    conf.set(tag, pushIfDirectoryExists(conf.get(tag, []), dir));
   });
 }
 
 function assignTagToDirs(tag, dirs) {
-  const conf = new Conf();
-
   const dirList = conf.get(tag, []);
+
   dirs.forEach(dir => pushIfDirectoryExists(dirList, dir));
   conf.set(tag, dirList);
 }
 
 function deleteTag(tag) {
-  const conf = new Conf();
   conf.delete(tag);
 }
 
 function resolve(pathspec) {
-  const conf = new Conf();
-  let resolvedPaths;
   let dirList = [];
 
   pathspec.forEach((tagOrPath) => {
-    if (tagOrPath[0] === TAG_MARKER) {
-      resolvedPaths = conf.get(tagOrPath.substr(1), []);
-    } else {
-      resolvedPaths = pushIfDirectoryExists([], tagOrPath);
-    }
-    dirList = dirList.concat(resolvedPaths);
+    dirList = dirList.concat(
+      tagOrPath[0] === TAG_MARKER
+        ? conf.get(tagOrPath.substr(1), [])
+        : pushIfDirectoryExists([], tagOrPath),
+    );
   });
 
   return [...new Set(dirList)];

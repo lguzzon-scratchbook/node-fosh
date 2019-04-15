@@ -5,3 +5,5 @@ require('yargs')
   .demandCommand()
   .help()
   .argv;
+
+/* eslint no-unused-expressions: off */
