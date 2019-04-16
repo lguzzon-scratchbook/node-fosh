@@ -67,6 +67,10 @@ for this (omit the path of the root directory (`./src`) to find everywhere):
 $ es -regex '^\.git$' './src' | Split-Path -Parent | shdo add '@git-repos'
 ```
 
+### List: Prints the path of the tag list file
+
+You can edit it in a texteditor (Notepad, Vim, etc.).
+
 ### Run: Execute commands in multiple directories
 
 Arguments can be tags and paths.

@@ -8,6 +8,10 @@ function loopSeparator() {
   console.log(`\n${'='.repeat(process.stdout.columns - 1)}`);
 }
 
+function rawMessage(message) {
+  console.log(message);
+}
+
 function warningMessage(message) {
   console.warn('shdo: WARNING:', message);
 }
@@ -37,6 +41,7 @@ function repl(commandName, callback) {
 module.exports.repl = repl;
 module.exports.iterationSeparator = iterationSeparator;
 module.exports.loopSeparator = loopSeparator;
+module.exports.rawMessage = rawMessage;
 module.exports.warningMessage = warningMessage;
 module.exports.errorMessage = errorMessage;
 

@@ -59,9 +59,14 @@ function parse(dir) {
   return path.parse(dir);
 }
 
+function getTagFilePath() {
+  return conf.path;
+}
+
 module.exports.TAG_MARKER = TAG_MARKER;
 module.exports.assignDirToTags = assignDirToTags;
 module.exports.assignTagToDirs = assignTagToDirs;
 module.exports.resolve = resolve;
 module.exports.parse = parse;
+module.exports.getTagFilePath = getTagFilePath;
 module.exports.deleteTag = deleteTag;
