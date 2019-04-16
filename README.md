@@ -32,17 +32,17 @@ you didn't know that you need it:
 
 ## Commands
 
-### Add: Assign tags to directories
+### Tag: Assign tags to directories
 
 The tags can be specified as command-line parameters prefixed with `@`,
 directories should be listed in the prompt, or piped to stdin.
 
 ```
-$ shdo add "@pictures" "@personal"
-shdo: add > /home/myself/photos
-shdo: add > /home/mom/my_little_family
+$ shdo tag "@pictures" "@personal"
+shdo: tag > /home/myself/photos
+shdo: tag > /home/mom/my_little_family
 
-$ echo -e "/home/myself/photos \n /home/mom/my_little_family" | shdo add "@pictures" "@personal"
+$ echo -e "/home/myself/photos \n /home/mom/my_little_family" | shdo tag "@pictures" "@personal"
 ```
 
 #### Find Git repositories
@@ -52,10 +52,10 @@ $ echo -e "/home/myself/photos \n /home/mom/my_little_family" | shdo add "@pictu
 
 ```
 # Linux / Windows Git Bash / ...
-$ find "./" -name ".git" -printf "%h\n" | shdo add "@git-repos"
+$ find "./" -name ".git" -printf "%h\n" | shdo tag "@git-repos"
 
 # Windows PowerShell
-$ Get-ChildItem './' -Recurse -Directory -Hidden -Filter '.git' | ForEach-Object { Split-Path $_.FullName -Parent } | shdo add '@git-repos'
+$ Get-ChildItem './' -Recurse -Directory -Hidden -Filter '.git' | ForEach-Object { Split-Path $_.FullName -Parent } | shdo tag '@git-repos'
 ```
 
 **On Windows you can use Everything search engine's `es` [command-line
@@ -64,7 +64,7 @@ to find Git repositories rapidly**. Use the following command in PowerShell
 for this (omit the path of the root directory (`./src`) to find everywhere):
 
 ```
-$ es -regex '^\.git$' './src' | Split-Path -Parent | shdo add '@git-repos'
+$ es -regex '^\.git$' './src' | Split-Path -Parent | shdo tag '@git-repos'
 ```
 
 ### List: Prints the path of the tag list file
