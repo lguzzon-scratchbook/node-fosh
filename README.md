@@ -26,6 +26,12 @@ for(dir in selectedDirectories) {
 
 This also means the name: `for ... shell ...` -> `fosh`.
 
+## Installation
+
+```
+$ npm install -g fosh
+```
+
 Get the source code, report bugs, open pull requests, or just star because
 you didn't know that you need it:
 
