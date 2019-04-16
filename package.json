@@ -1,6 +1,6 @@
 {
   "name": "fosh",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Execute shell commands in multiple directories grouped by tags",
   "license": "MIT",
   "author": {
