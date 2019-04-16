@@ -2,7 +2,7 @@ const cli = require('../cli');
 const pathHandler = require('../path-handler');
 
 exports.command = 'add [tags...]';
-exports.desc = 'Assign directories to tags';
+exports.desc = 'Assign tags to directories';
 
 exports.handler = function addCommand(argv) {
   cli.repl('add', (dir) => {

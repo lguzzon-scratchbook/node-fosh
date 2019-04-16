@@ -47,14 +47,14 @@ function deleteTag(tag) {
   conf.delete(tag);
 }
 
-function resolve(pathspec) {
+function resolve(tagOrPath) {
   let dirList = [];
 
-  pathspec.forEach((tagOrPath) => {
+  tagOrPath.forEach((current) => {
     dirList = dirList.concat(
-      tagOrPath[0] === TAG_MARKER
-        ? conf.get(tagOrPath.substr(1), [])
-        : pushIfDirectoryExists([], tagOrPath),
+      current[0] === TAG_MARKER
+        ? conf.get(current.substr(1), [])
+        : pushIfDirectoryExists([], current),
     );
   });
 
