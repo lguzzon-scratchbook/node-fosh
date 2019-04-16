@@ -5,7 +5,13 @@ const cli = require('./cli');
 
 const TAG_MARKER = '@';
 
-const conf = new Conf();
+let conf;
+try {
+  conf = new Conf({ clearInvalidConfig: false });
+} catch (e) {
+  cli.errorMessage(`Invalid tag list file, aborting:\n${e}`);
+  process.exit();
+}
 
 function pushIfDirectoryExists(dirList, dir) {
   const resolvedDir = path.resolve(path.normalize(dir.trim()));
