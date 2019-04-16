@@ -13,18 +13,18 @@ function rawMessage(message) {
 }
 
 function warningMessage(message) {
-  console.warn('shdo: WARNING:', message);
+  console.warn('fosh: WARNING:', message);
 }
 
 function errorMessage(message) {
-  console.error('shdo: ERROR:', message);
+  console.error('fosh: ERROR:', message);
 }
 
 function repl(commandName, callback) {
   const input = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
-    prompt: `shdo: ${commandName} > `,
+    prompt: `fosh: ${commandName} > `,
   });
 
   input.prompt();

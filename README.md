@@ -1,9 +1,9 @@
-# Shdo: Execute shell commands in multiple directories grouped by tags
+# Fosh: Execute shell commands in multiple directories grouped by tags
 
 For developers who **running the same command in different directories**
-repeatedly, Shdo is a productivity tool that saves time by **executing the
+repeatedly, Fosh is a productivity tool that saves time by **executing the
 command without having to change the directory**. Unlike other similar tools,
-Shdo does not bound to a certain software (like Git for example), it can
+Fosh does not bound to a certain software (like Git for example), it can
 **execute any shell command**. **It works at least on Windows and Linux**.
 
 * **Manage multiple Git repositors together**
@@ -24,11 +24,13 @@ for(dir in selectedDirectories) {
 }
 ```
 
+This also means the name: `for ... shell ...` -> `fosh`.
+
 Get the source code, report bugs, open pull requests, or just star because
 you didn't know that you need it:
 
-* https://gitlab.com/bimlas/node-shdo (official repository)
-* https://github.com/bimlas/node-shdo (mirror, star if you like it)
+* https://gitlab.com/bimlas/node-fosh (official repository)
+* https://github.com/bimlas/node-fosh (mirror, star if you like it)
 
 ## Commands
 
@@ -38,11 +40,11 @@ The tags can be specified as command-line parameters prefixed with `@`,
 directories should be listed in the prompt, or piped to stdin.
 
 ```
-$ shdo tag "@pictures" "@personal"
-shdo: tag > /home/myself/photos
-shdo: tag > /home/mom/my_little_family
+$ fosh tag "@pictures" "@personal"
+fosh: tag > /home/myself/photos
+fosh: tag > /home/mom/my_little_family
 
-$ echo -e "/home/myself/photos \n /home/mom/my_little_family" | shdo tag "@pictures" "@personal"
+$ echo -e "/home/myself/photos \n /home/mom/my_little_family" | fosh tag "@pictures" "@personal"
 ```
 
 #### Find Git repositories
@@ -52,10 +54,10 @@ $ echo -e "/home/myself/photos \n /home/mom/my_little_family" | shdo tag "@pictu
 
 ```
 # Linux / Windows Git Bash / ...
-$ find "./" -name ".git" -printf "%h\n" | shdo tag "@git-repos"
+$ find "./" -name ".git" -printf "%h\n" | fosh tag "@git-repos"
 
 # Windows PowerShell
-$ Get-ChildItem './' -Recurse -Directory -Hidden -Filter '.git' | ForEach-Object { Split-Path $_.FullName -Parent } | shdo tag '@git-repos'
+$ Get-ChildItem './' -Recurse -Directory -Hidden -Filter '.git' | ForEach-Object { Split-Path $_.FullName -Parent } | fosh tag '@git-repos'
 ```
 
 **On Windows you can use Everything search engine's `es` [command-line
@@ -64,7 +66,7 @@ to find Git repositories rapidly**. Use the following command in PowerShell
 for this (omit the path of the root directory (`./src`) to find everywhere):
 
 ```
-$ es -regex '^\.git$' './src' | Split-Path -Parent | shdo tag '@git-repos'
+$ es -regex '^\.git$' './src' | Split-Path -Parent | fosh tag '@git-repos'
 ```
 
 ### List: Prints the path of the tag list file
@@ -76,8 +78,8 @@ You can edit it in a texteditor (Notepad, Vim, etc.).
 Arguments can be tags and paths.
 
 ```
-$ shdo run "@git-repos" "../wip-project"
-shdo: run > git status --short --branch
+$ fosh run "@git-repos" "../wip-project"
+fosh: run > git status --short --branch
 
 __ @1 awesome-project (/home/me/src/) ________________________________________
 ## master
@@ -95,7 +97,7 @@ __ @3 wip-project (/home/me/helping-tom/) ____________________________________
  M example-code.js
 
 ==============================================================================
-shdo: run > another command and so on ...
+fosh: run > another command and so on ...
 ```
 
 #### Filtering the directory list
@@ -104,7 +106,7 @@ If you want to **execute a command only in certain directories**, you can
 select them by their index.
 
 ```
-shdo: run > @1,3 git status --short --branch
+fosh: run > @1,3 git status --short --branch
 
 __ @1 awesome-project (/home/me/src/) ________________________________________
 ## master
@@ -126,8 +128,8 @@ arguments are given, but if you run it without arguments, it executes the
 commands on the last specified directories.
 
 ```
-$ shdo run "@git-repos" "../wip-project"
-shdo: run > git status --short --branch
+$ fosh run "@git-repos" "../wip-project"
+fosh: run > git status --short --branch
 
 __ @1 awesome-project (/home/me/src/) ________________________________________
 ## master
@@ -136,9 +138,9 @@ AM README.md
 
 # Another terminal
 
-$ shdo run
-shdo: WARNING: Using most recently used directory list
-shdo: run > @3 git diff
+$ fosh run
+fosh: WARNING: Using most recently used directory list
+fosh: run > @3 git diff
 
 __ @3 wip-project (/home/me/helping-tom/) ____________________________________
  example-code.js | 1 +
