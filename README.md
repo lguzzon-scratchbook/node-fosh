@@ -4,9 +4,13 @@ For developers who **running the same command in different directories**
 repeatedly, Fosh is a productivity tool that saves time by **executing the
 command without having to change the directory**. Unlike other similar tools,
 Fosh does not bound to a certain software (like Git for example), it can
-**execute any shell command**. **It works at least on Windows and Linux**.
+**execute any shell command**. **It works at least on Windows and Linux
+regardless of shell type**.
+
+![screencast](https://i.imgur.com/ZbCUxNS.gif)
 
 * **Manage multiple Git repositors together**
+  * `push` and `pull` all of your repos at once
   * Checkout the same branch for project and its submodules
   * Commit with the same message: walk through the repos without
     interruption and copy / paste the same commit message
@@ -15,7 +19,7 @@ Fosh does not bound to a certain software (like Git for example), it can
     push
 * **Control multiple vagrant machines at the same time**
 
-The essence of the code in a nutshell:
+The essence of the logic in a nutshell:
 
 ```
 for(dir in selectedDirectories) {
@@ -31,6 +35,8 @@ This also means the name: `for ... shell ...` -> `fosh`.
 ```
 $ npm install -g fosh
 ```
+
+https://www.npmjs.com/package/fosh
 
 Get the source code, report bugs, open pull requests, or just star because
 you didn't know that you need it:
@@ -49,8 +55,9 @@ directories should be listed in the prompt, or piped to stdin.
 $ fosh tag "@pictures" "@personal"
 fosh: tag > /home/myself/photos
 fosh: tag > /home/mom/my_little_family
+fosh: tag > ../granny
 
-$ echo -e "/home/myself/photos \n /home/mom/my_little_family" | fosh tag "@pictures" "@personal"
+$ echo -e "/home/myself/photos \n /home/mom/my_little_family \n ../granny" | fosh tag "@pictures" "@personal"
 ```
 
 #### Find Git repositories
